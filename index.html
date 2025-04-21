@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page page-center">
+        <div class="container-tight py-4">
+            <div class="card card-md login-container">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Login</h2>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Password
+                            </label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </div>
+                        <div id="errorMessage" class="text-danger mt-2 text-center" style="display:none;">
+                            Username atau password salah.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BcryptJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+    <!-- Your JS -->
+    <script src="script.js"></script>
+</body>
+<script>
+    // Hardcoded username dan hash password
+    const hardcodedUsername = "admin";
+    const hardcodedPasswordHash = "$2y$10$T0Pa0UPoum0T6O3dQbvf3uqVGsmlqq6Z1ZndJDIVQOn00mHJ29MrS"; // hash dari: admin123
+
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const isMatch = await bcrypt.compare(password, hardcodedPasswordHash);
+
+        if (username === hardcodedUsername && isMatch) {
+            alert("Login berhasil!");
+            // redirect atau tindakan lain
+        } else {
+            document.getElementById("errorMessage").style.display = "block";
+        }
+    });
+
+</script>
+
+</html>

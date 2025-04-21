@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarik Tambang Dinosaurus</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    .arena {
+      position: relative;
+      width: 100%;
+      max-width: 90%;
+      height: 400px;
+      margin-top: 40px;
+      background: #f4f4f4;
+      border-top: 2px solid #ccc;
+      border-bottom: 2px solid #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .rope-container {
+      position: relative;
+      width: 950px;
+      height: 2px;
+      background: #444;
+      transition: transform 0.3s ease-out;
+      z-index: 2;
+    }
+
+    .rope-knot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      /* perbesar juga kalau mau */
+      z-index: 3;
+    }
+
+    .team {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 1;
+      transition: transform 0.3s ease-out;
+    }
+
+    .team-A {
+      left: calc(30% - 250px);
+      flex-direction: row-reverse;
+    }
+
+    .team-B {
+      right: calc(30% - 250px);
+    }
+
+    .dino {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      background-size: cover;
+      animation: dino-walk 0.2s infinite;
+    }
+
+    .vertical-caption {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) rotate(180deg);
+      writing-mode: vertical-rl;
+      font-size: 14px;
+      /* dari 8px jadi lebih jelas */
+      color: white;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 4px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .dino-A {
+      transform: scaleX(-1);
+    }
+
+    .controls {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .controls button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 14px;
+    }
+
+    @keyframes dino-walk {
+      0% {
+        background-image: url('2.png');
+      }
+
+      33% {
+        background-image: url('3.png');
+      }
+
+      66% {
+        background-image: url('4.png');
+      }
+
+      99% {
+        background-image: url('2.png');
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Tarik Tambang Dinosaurus</h1>
+
+  <div class="arena">
+    <div class="team team-A" id="teamA"></div>
+
+    <div class="rope-container" id="rope">
+      <div class="rope-knot">🍔</div>
+    </div>
+
+    <div class="team team-B" id="teamB"></div>
+  </div>
+
+  <div class="controls">
+    <button onclick="addDino('A')">+ Dino A</button>
+    <button onclick="addDino('B')">+ Dino B</button>
+    <button onclick="addPoint('A')">+ Point A</button>
+    <button onclick="addPoint('B')">+ Point B</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script>
+    const teamAEl = document.getElementById("teamA");
+    const teamBEl = document.getElementById("teamB");
+    const ropeEl = document.getElementById("rope");
+
+    let dinosA = 0;
+    let dinosB = 0;
+    let scoreA = 0;
+    let scoreB = 0;
+    const maxDino = 7;
+
+    function addDino(team) {
+      if (team === 'A' && dinosA < maxDino) {
+        dinosA++;
+        const wrapper = document.createElement("div");
+        wrapper.style.position = "relative";
+        wrapper.style.display = "inline-block";
+
+        const caption = document.createElement("div");
+        caption.className = "vertical-caption";
+        caption.textContent = `A${dinosA}`;
+
+        const dino = document.createElement("div");
+        dino.className = "dino dino-A";
+
+        wrapper.appendChild(caption);
+        wrapper.appendChild(dino);
+        teamAEl.appendChild(wrapper);
+      } else if (team === 'B' && dinosB < maxDino) {
+        dinosB++;
+        const wrapper = document.createElement("div");
+        wrapper.style.position = "relative";
+        wrapper.style.display = "inline-block";
+
+        const caption = document.createElement("div");
+        caption.className = "vertical-caption";
+        caption.textContent = `B${dinosB}`;
+
+        const dino = document.createElement("div");
+        dino.className = "dino dino-B";
+
+        wrapper.appendChild(caption);
+        wrapper.appendChild(dino);
+        teamBEl.appendChild(wrapper);
+      }
+    }
+
+
+    function addPoint(team) {
+      if (team === 'A') scoreA++;
+      else scoreB++;
+
+      updateRope();
+    }
+
+    function updateRope() {
+      const total = scoreA + scoreB;
+      let percent = 0.5;
+
+      if (total > 0) {
+        percent = scoreB / total;
+      }
+
+      const maxShift = 150; // pixel
+      const shift = (percent - 0.5) * 2 * maxShift;
+
+      ropeEl.style.transform = `translateX(${shift}px)`;
+      teamAEl.style.transform = `translate(${shift}px, -50%)`;
+      teamBEl.style.transform = `translate(${shift}px, -50%)`;
+    }
+  </script>
+
+</body>
+
+</html>
