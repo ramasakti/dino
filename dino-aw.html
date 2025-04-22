@@ -26,7 +26,11 @@
             max-width: 90%;
             height: 400px;
             margin-top: 40px;
-            background: #f4f4f4;
+            /* background: #f4f4f4; */
+            background-image: url('assets/bg.png'); /* atau link online */
+            background-size: cover;   /* atau contain, sesuai kebutuhan */
+            background-position: center;
+            background-repeat: no-repeat;
             border-top: 2px solid #ccc;
             border-bottom: 2px solid #ccc;
             display: flex;
@@ -134,14 +138,11 @@
 </head>
 
 <body>
-
-    <h1>Tarik Tambang Dinosaurus</h1>
-
     <div class="arena">
         <div class="team team-A" id="teamA"></div>
 
         <div class="rope-container" id="rope">
-            <div class="rope-knot">🍔</div>
+            <div class="rope-knot">🐫</div>
         </div>
 
         <div class="team team-B" id="teamB"></div>
